@@ -13,35 +13,39 @@ const invalidSaCodes = [
 ];
 
 const isValidSaCode = (saCode) => {
-    saCode = saCode.replace(/[a-zA-Z0-9]/g, "");
+    const saCodeArray = saCode.split(":");
 
-    if (saCode.match(/^[:;]*$/) === null) {
+    if (saCodeArray.length !== 2) {
         return false;
     }
 
-    const firstCharacter = saCode[0];
-    const lastCharacter = saCode[saCode.length - 1];
+    const prefix = saCodeArray[0].replace(/[a-zA-Z0-9]/g, "");
+    const value = saCodeArray[1].replace(/[a-zA-Z0-9]/g, "");
 
-    if (firstCharacter !== ":") return false;
-    if (lastCharacter === ";") return false;
-    if (lastCharacter === ":") return false;
-
-    let prevCharacter = firstCharacter;
-    for (var i = 1; i < saCode.length; i++) {
-        if (saCode.charAt(i) === prevCharacter) {
-            return false;
-        } else {
-            prevCharacter = saCode.charAt(i);
-        }
+    if (prefix.length !== 0 || value.length !== 0) {
+        return false;
     }
 
     return true;
 };
 
-validSaCodes.forEach((saCode) => {
-    console.log(isValidSaCode(saCode) === true);
+const isValidSaCodeListString = (saCodeListString) => {
+    let result = true;
+    const saCodeListArray = saCodeListString.split(";");
+
+    saCodeListArray.forEach((saCode) => {
+        if (!isValidSaCode(saCode)) {
+            result = false;
+        }
+    });
+
+    return result;
+};
+
+validSaCodes.forEach((saCodeListString) => {
+    console.log(isValidSaCodeListString(saCodeListString) === true);
 });
 
-invalidSaCodes.forEach((saCode) => {
-    console.log(isValidSaCode(saCode) === false);
+invalidSaCodes.forEach((saCodeListString) => {
+    console.log(!isValidSaCodeListString(saCodeListString) === true);
 });
