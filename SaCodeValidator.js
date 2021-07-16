@@ -5,18 +5,12 @@
  * 4. The last SA code from the list is not followed by a semicolon
  */
 
-const validSaCodes = ["P:20;P:21;P:22;P:23", "P:20"];
-const invalidSaCodes = [
-    "P:20;;P21;P:22;P:23;",
-    "P::20;P21;P:22;P:23",
-    "P:20;P21,P:22;P:23",
-];
-
 const isValidSaCode = (saCode) => {
-    const [prefix, value] = saCode.split(":");
+    const saCodeArray = saCode.split(":");
+    const [prefix, value] = saCodeArray;
 
     if (
-        saCode.split(":").length !== 2 ||
+        saCodeArray.length !== 2 ||
         !prefix.match("^[A-Za-z0-9]+$") ||
         !value.match("^[A-Za-z0-9]+$")
     ) {
@@ -26,7 +20,7 @@ const isValidSaCode = (saCode) => {
     return true;
 };
 
-const isValidSaCodesListString = (saCodesListString) => {
+export const isValidSaCodesListString = (saCodesListString) => {
     let result = true;
     const saCodesListArray = saCodesListString.split(";");
 
@@ -38,11 +32,3 @@ const isValidSaCodesListString = (saCodesListString) => {
 
     return result;
 };
-
-validSaCodes.forEach((saCodesListString) => {
-    console.log(isValidSaCodesListString(saCodesListString) === true);
-});
-
-invalidSaCodes.forEach((saCodesListString) => {
-    console.log(isValidSaCodesListString(saCodesListString) === false);
-});
